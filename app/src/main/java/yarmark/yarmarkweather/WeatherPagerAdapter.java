@@ -1,35 +1,33 @@
 package yarmark.yarmarkweather;
 
+import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
-/**
- * Created by LeahYarmark on 1/9/2016.
- */
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.GsonConverterFactory;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 public class WeatherPagerAdapter extends PagerAdapter {
 
-    @Bind(R.id.location)
-    TextView location;
-    @Bind(R.id.temperature)
-    TextView temperature;
-    @Bind(R.id.high)
-    TextView high;
-    @Bind(R.id.low)
-    TextView low;
-    @Bind(R.id.desc)
-    TextView description;
+    private TextView time;
+    private RecyclerView recyclerView;
+    private String[] locations;
+    private Context context;
 
-    private CurrentWeather weather;
-
-
-    public WeatherPagerAdapter(CurrentWeather weather) {
-        this.weather = weather;
+    public WeatherPagerAdapter(String[] locations, Context mainActivityContext) {
+        this.locations = locations;
+        this.context = mainActivityContext;
     }
 
     @Override
@@ -39,23 +37,46 @@ public class WeatherPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        LayoutInflater inflater = LayoutInflater.from(container.getContext());
-        View view = inflater.inflate(R.layout.current_weather, null);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://api.openweathermap.org/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        temperature.setText(this.weather.getTemperature());
+        WeatherService service = retrofit.create(WeatherService.class);
+        Call<JsonObject> call = service.getLocationWeather(locations[position]);
 
-        ButterKnife.bind(view);
-        container.addView(view);
-        return view;
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Response<JsonObject> response) {
+                JsonObject weatherJson = response.body();
+
+                GsonBuilder builder = new GsonBuilder();
+                Gson gson = builder.create();
+
+                LocationWeather locationWeather = gson.fromJson(weatherJson, LocationWeather.class);
+                WeatherRecyclerAdapter recyclerAdapter = new WeatherRecyclerAdapter(locationWeather.getList(), context);
+                setAdapter(recyclerAdapter);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+        return container.getContext();
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return locations.length;
     }
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
         return view == object;
+    }
+
+    public void setAdapter(WeatherRecyclerAdapter recyclerView) {
+        this.recyclerView.setAdapter(recyclerView);
     }
 }

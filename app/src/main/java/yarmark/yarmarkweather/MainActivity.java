@@ -19,6 +19,7 @@ import retrofit2.Retrofit;
 public class MainActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
+    private String[] locations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,32 +27,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://api.openweathermap.org/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        String zip1 = "11218";
+        String zip2 = "08701";
+        locations = new String[2];
+        locations[0] = zip1;
+        locations[1] = zip2;
 
-        WeatherService service = retrofit.create(WeatherService.class);
-        Call<JsonObject> call = service.getCurrentWeather();
-        call.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Response<JsonObject> response) {
-                JsonObject currentWeatherJson = response.body();
-
-                GsonBuilder builder = new GsonBuilder();
-                Gson gson = builder.create();
-
-                CurrentWeather currentWeather = gson.fromJson(currentWeatherJson, CurrentWeather.class);
-
-                WeatherPagerAdapter adapter = new WeatherPagerAdapter(currentWeather);
-                viewPager.setAdapter(adapter);
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-
-            }
-        });
+        WeatherPagerAdapter pagerAdapter = new WeatherPagerAdapter(locations, this);
+        viewPager.setAdapter(pagerAdapter);
 
 
     }
