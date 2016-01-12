@@ -36,7 +36,7 @@ public class WeatherPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(ViewGroup container, final int position) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://api.openweathermap.org/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -54,7 +54,9 @@ public class WeatherPagerAdapter extends PagerAdapter {
                 Gson gson = builder.create();
 
                 LocationWeather locationWeather = gson.fromJson(weatherJson, LocationWeather.class);
-                WeatherRecyclerAdapter recyclerAdapter = new WeatherRecyclerAdapter(locationWeather.getList(), context);
+                LocationWeather[] locations = new LocationWeather[10];
+                locations[position] = locationWeather;
+                WeatherRecyclerAdapter recyclerAdapter = new WeatherRecyclerAdapter(locations, context);
                 setAdapter(recyclerAdapter);
             }
 

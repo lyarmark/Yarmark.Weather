@@ -5,6 +5,7 @@ public class ListInfo {
 	private Weather[] weather;
 	private Temp temp;
 
+//json returns an array with 1 weather object. always need [0]
 	public Weather getWeather() {
 		return weather[0];
 	}

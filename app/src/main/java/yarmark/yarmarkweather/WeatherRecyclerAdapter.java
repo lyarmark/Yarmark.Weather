@@ -11,11 +11,11 @@ import java.util.List;
 public class WeatherRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
-    private ListInfo[] items;
+    private LocationWeather[] weathers;
     private Context context;
 
-    public WeatherRecyclerAdapter(ListInfo[] items, Context mainActivityContext) {
-        this.items = items;
+    public WeatherRecyclerAdapter(LocationWeather[] weathers, Context mainActivityContext) {
+        this.weathers = weathers;
         this.context = mainActivityContext;
     }
 
@@ -26,17 +26,17 @@ public class WeatherRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         switch (viewType) {
             case 0: {
                 View currentView = inflater.inflate(R.layout.current_weather, viewGroup, false);
-                viewHolder = new CurrentViewHolder(currentView);
+                viewHolder = new CurrentViewHolder(currentView, this.context);
                 break;
             }
             case 1: {
                 View forecastView = inflater.inflate(R.layout.recycler_forecast, viewGroup, false);
-                viewHolder = new ForecastViewHolder(forecastView);
+                viewHolder = new ForecastViewHolder(forecastView, this.context);
                 break;
             }
             default: {
                 View currentView = inflater.inflate(R.layout.current_weather, viewGroup, false);
-                viewHolder = new CurrentViewHolder(currentView);
+                viewHolder = new CurrentViewHolder(currentView, this.context);
             }
         }
         return viewHolder;
@@ -47,10 +47,12 @@ public class WeatherRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         switch (viewHolder.getItemViewType()) {
             case 0: {
                 CurrentViewHolder currentViewHolder = (CurrentViewHolder) viewHolder;
+                currentViewHolder.bind(this.weathers[0]);
                 break;
             }
             case 1: {
                 ForecastViewHolder forecastViewHolder = (ForecastViewHolder) viewHolder;
+                forecastViewHolder.bind(weathers[position]);
                 break;
             }
         }
@@ -58,6 +60,6 @@ public class WeatherRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public int getItemCount() {
-        return items.length;
+        return weathers.length;
     }
 }

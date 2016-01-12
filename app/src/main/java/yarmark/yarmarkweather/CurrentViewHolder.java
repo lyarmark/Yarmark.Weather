@@ -1,5 +1,6 @@
 package yarmark.yarmarkweather;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +13,13 @@ public class CurrentViewHolder extends RecyclerView.ViewHolder {
     private TextView high;
     private TextView low;
     private TextView description;
+    private Context context;
 
     private LocationWeather currentWeather;
 
-    public CurrentViewHolder(View itemView) {
+    public CurrentViewHolder(View itemView, Context mainActivityContext) {
         super(itemView);
+        this.context = mainActivityContext;
 
         this.location = (TextView) itemView.findViewById(R.id.location);
         this.temperature = (TextView) itemView.findViewById(R.id.temperature);
