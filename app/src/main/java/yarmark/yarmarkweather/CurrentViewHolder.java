@@ -8,32 +8,27 @@ import android.widget.TextView;
 
 public class CurrentViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView location;
     private TextView temperature;
     private TextView high;
     private TextView low;
     private TextView description;
     private Context context;
 
-    private LocationWeather currentWeather;
-
     public CurrentViewHolder(View itemView, Context mainActivityContext) {
         super(itemView);
         this.context = mainActivityContext;
 
-        this.location = (TextView) itemView.findViewById(R.id.location);
         this.temperature = (TextView) itemView.findViewById(R.id.temperature);
         this.high = (TextView) itemView.findViewById(R.id.high);
         this.low = (TextView) itemView.findViewById(R.id.low);
         this.description = (TextView) itemView.findViewById(R.id.desc);
     }
 
-    public void bind(LocationWeather currentWeather) {
-        this.location.setText(this.currentWeather.getLocation());
-        this.temperature.setText(this.currentWeather.getTemp(0).getDay());
-        this.high.setText(this.currentWeather.getTemp(0).getMax());
-        this.low.setText(this.currentWeather.getTemp(0).getMin());
-        this.description.setText(this.currentWeather.getWeather(0).getDescription());
+    public void bind(ListInfo currentWeather) {
+        this.temperature.setText(currentWeather.getTemp().getDay());
+        this.high.setText(currentWeather.getTemp().getMax());
+        this.low.setText(currentWeather.getTemp().getMin());
+        this.description.setText(currentWeather.getWeather().getDescription());
 
     }
 }

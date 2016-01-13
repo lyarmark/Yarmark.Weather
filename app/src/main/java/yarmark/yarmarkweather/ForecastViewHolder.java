@@ -22,9 +22,9 @@ public class ForecastViewHolder extends RecyclerView.ViewHolder {
         this.low = (TextView) itemView.findViewById(R.id.forecastLow);
     }
 
-    public void bind(LocationWeather weather) {
-        this.high.setText(weather.getTemp(0).getMax());
-        this.low.setText(weather.getTemp(0).getMin());
+    public void bind(ListInfo weather) {
+        this.high.setText(weather.getTemp().getMax());
+        this.low.setText(weather.getTemp().getMin());
 
     }
 

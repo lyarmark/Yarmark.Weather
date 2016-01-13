@@ -6,16 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class WeatherRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
-    private LocationWeather[] weathers;
+    private ListInfo[] weatherList;
     private Context context;
 
-    public WeatherRecyclerAdapter(LocationWeather[] weathers, Context mainActivityContext) {
-        this.weathers = weathers;
+    public WeatherRecyclerAdapter(ListInfo[] weatherList, Context mainActivityContext) {
+        this.weatherList = weatherList;
         this.context = mainActivityContext;
     }
 
@@ -25,18 +25,14 @@ public class WeatherRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         switch (viewType) {
             case 0: {
-                View currentView = inflater.inflate(R.layout.current_weather, viewGroup, false);
-                viewHolder = new CurrentViewHolder(currentView, this.context);
+                View current = inflater.inflate(R.layout.current_weather, viewGroup, false);
+                viewHolder = new CurrentViewHolder(current, viewGroup.getContext());
                 break;
             }
             case 1: {
-                View forecastView = inflater.inflate(R.layout.recycler_forecast, viewGroup, false);
-                viewHolder = new ForecastViewHolder(forecastView, this.context);
+                View forecast = inflater.inflate(R.layout.forecast, viewGroup, false);
+                viewHolder = new ForecastViewHolder(forecast, viewGroup.getContext());
                 break;
-            }
-            default: {
-                View currentView = inflater.inflate(R.layout.current_weather, viewGroup, false);
-                viewHolder = new CurrentViewHolder(currentView, this.context);
             }
         }
         return viewHolder;
@@ -47,19 +43,28 @@ public class WeatherRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         switch (viewHolder.getItemViewType()) {
             case 0: {
                 CurrentViewHolder currentViewHolder = (CurrentViewHolder) viewHolder;
-                currentViewHolder.bind(this.weathers[0]);
+                currentViewHolder.bind(this.weatherList[0]);
                 break;
             }
             case 1: {
                 ForecastViewHolder forecastViewHolder = (ForecastViewHolder) viewHolder;
-                forecastViewHolder.bind(weathers[position]);
+                forecastViewHolder.bind(this.weatherList[position]);
                 break;
             }
         }
     }
 
     @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+    @Override
     public int getItemCount() {
-        return weathers.length;
+        return weatherList.length;
     }
 }

@@ -6,15 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.GsonConverterFactory;
-import retrofit2.Response;
-import retrofit2.Retrofit;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,13 +19,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
 
-        String zip1 = "11218";
-        String zip2 = "08701";
-        locations = new String[2];
-        locations[0] = zip1;
-        locations[1] = zip2;
+        ArrayList<String> zips = new ArrayList<String>();
+        zips.add("11218");
+        zips.add("08701");
 
-        WeatherPagerAdapter pagerAdapter = new WeatherPagerAdapter(locations, this);
+        LocationPagerAdapter pagerAdapter = new LocationPagerAdapter(zips, this);
         viewPager.setAdapter(pagerAdapter);
 
 
