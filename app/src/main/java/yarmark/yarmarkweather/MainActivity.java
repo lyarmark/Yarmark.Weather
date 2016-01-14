@@ -1,5 +1,6 @@
 package yarmark.yarmarkweather;
 
+import android.content.SharedPreferences;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,47 +8,52 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ViewPager viewPager;
-    private String[] locations;
+    private ViewPager locationsViewPager;
+    ArrayList<String> zips;
+    private SharedPreferences sharedPreferences;
+    private LocationPagerAdapter locationsPagerAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
 
-        ArrayList<String> zips = new ArrayList<String>();
-        zips.add("11218");
-        zips.add("99501");
+        locationsViewPager = (ViewPager) findViewById(R.id.viewPager);
+        zips = new ArrayList<String>();
+        sharedPreferences = this.getSharedPreferences("DEFAULT", MODE_PRIVATE);
 
-        LocationPagerAdapter pagerAdapter = new LocationPagerAdapter(zips, this);
-        viewPager.setAdapter(pagerAdapter);
-
-
+        locationsPagerAdapter = new LocationPagerAdapter(zips, this);
+        locationsViewPager.setAdapter(locationsPagerAdapter);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        StringBuilder builder = new StringBuilder();
+        for (String l : zips) {
+            builder.append(l + " ");
         }
+        editor.putString("LOCATIONS", builder.toString());
+        editor.apply();
+    }
 
-        return super.onOptionsItemSelected(item);
+    @Override
+    public void onResume() {
+        super.onResume();
+        String temp = sharedPreferences.getString("LOCATIONS", "11218");
+        String[] temp2 = temp.split(" ");
+        for (String s : temp2) {
+            zips.add(s);
+        }
+//        String[] zipsArray = sharedPreferences.getString("ZIPCODES", "11218").split(" ");
+        //      ArrayList<String> zips = new ArrayList<String>();
+        //    Collections.addAll(zips, zipsArray);
+        locationsPagerAdapter.notifyDataSetChanged();
     }
 }

@@ -18,7 +18,7 @@ public class ListInfo {
     }
 
     public String getDt() {
-        Date date = new Date(dt * 100);
+        Date date = new Date(dt * 1000);
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE");
         return dateFormat.format(date);
     }

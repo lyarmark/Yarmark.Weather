@@ -7,45 +7,61 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/temperature"
+        android:id="@+id/city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="#fff926"
+        android:textSize="50sp"
+        tools:text="city" />
+
+    <ImageView
+        android:id="@+id/currentIcon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_alignParentLeft="true"
+        android:layout_marginTop="500dp"
+        android:textSize="20sp"
+        tools:text="image" />
+
+    <TextView
+        android:id="@+id/desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="500dp"
+        android:layout_toRightOf="@id/currentIcon"
+        android:textColor="#fe6aff37"
         android:textSize="40sp"
-        tools:text="temperature" />
+        tools:text="Description" />
 
     <TextView
         android:id="@+id/high"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/temperature"
+        android:layout_below="@id/currentIcon"
+        android:textColor="#feff301a"
+        android:textSize="30sp"
         tools:text="high" />
 
     <TextView
         android:id="@+id/low"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/temperature"
+        android:layout_below="@id/currentIcon"
         android:layout_toRightOf="@+id/high"
+        android:textColor="#fe2942ff"
+        android:textSize="30sp"
         tools:text="low" />
 
-    <ImageView
-        android:id="@+id/currentIcon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_above="@id/high"
-        android:layout_alignParentLeft="true"
-        tools:text="image" />
-
-
     <TextView
-        android:id="@+id/desc"
+        android:id="@+id/temperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/high"
-        android:layout_toRightOf="@id/currentIcon"
-        tools:text="Description" />
-
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/high"
+        android:textColor="#fe59dd2e"
+        android:textSize="100sp"
+        tools:text="temperature" />
 
 </RelativeLayout>

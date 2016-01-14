@@ -5,18 +5,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class WeatherRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-
     private ListInfo[] weatherList;
     private Context context;
+    private String city;
 
-    public WeatherRecyclerAdapter(ListInfo[] weatherList, Context mainActivityContext) {
+    public WeatherRecyclerAdapter(ListInfo[] weatherList, Context mainActivityContext, String city) {
         this.weatherList = weatherList;
         this.context = mainActivityContext;
+        this.city = city;
     }
 
     @Override
@@ -43,7 +46,7 @@ public class WeatherRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         switch (viewHolder.getItemViewType()) {
             case 0: {
                 CurrentViewHolder currentViewHolder = (CurrentViewHolder) viewHolder;
-                currentViewHolder.bind(this.weatherList[0]);
+                currentViewHolder.bind(this.weatherList[0], this.city);
                 break;
             }
             case 1: {

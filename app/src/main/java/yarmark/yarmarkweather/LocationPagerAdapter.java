@@ -1,18 +1,20 @@
 package yarmark.yarmarkweather;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v4.view.PagerAdapter;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,8 +29,13 @@ import retrofit2.Retrofit;
 
 public class LocationPagerAdapter extends PagerAdapter {
 
+    private Button addButton;
+    private EditText chooseZip;
+
     private TextView zipcode;
     private TextView time;
+    private ImageView background;
+
     private ArrayList<String> zips;
     private Context context;
     private Retrofit retrofit;
@@ -45,24 +52,57 @@ public class LocationPagerAdapter extends PagerAdapter {
         this.service = retrofit.create(WeatherService.class);
     }
 
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((View) object);
-    }
 
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
         LayoutInflater inflater = LayoutInflater.from(container.getContext());
         LinearLayoutManager layoutManager = new LinearLayoutManager(container.getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        View view = inflater.inflate(R.layout.weather_pager, null);
-        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
-        recyclerView.setLayoutManager(layoutManager);
+        View weatherPagerView = inflater.inflate(R.layout.weather_pager, null);
+        final RecyclerView weatherRecyclerView = (RecyclerView) weatherPagerView.findViewById(R.id.list);
+        weatherRecyclerView.setLayoutManager(layoutManager);
 
-        this.zipcode = (TextView) view.findViewById(R.id.zipcode);
+        this.background = (ImageView) weatherPagerView.findViewById(R.id.background);
+        Picasso.with(this.context).load("http://lorempixel.com/g/610/835/nature/")
+                .placeholder(R.drawable.weather)
+                .into(this.background);
+
+        this.addButton = (Button) weatherPagerView.findViewById(R.id.plusButton);
+        this.addButton.setText("+");
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LayoutInflater dinflater = LayoutInflater.from(context);
+                View dialogueView = dinflater.inflate(R.layout.add_location, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setView(dialogueView);
+                chooseZip = (EditText) dialogueView.findViewById(R.id.chooseZip);
+
+                builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        zips.add(String.valueOf(chooseZip.getText()));
+                        notifyDataSetChanged();
+                    }
+                })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+        this.zipcode = (TextView) weatherPagerView.findViewById(R.id.zipcode);
         this.zipcode.setText(zips.get(position));
 
-        this.time = (android.widget.TextClock) view.findViewById(R.id.dateTime);
+        this.time = (android.widget.TextClock) weatherPagerView.findViewById(R.id.dateTime);
         SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss aa");
         Date date = new Date();
         this.time.setText(format.format(date));
@@ -81,17 +121,17 @@ public class LocationPagerAdapter extends PagerAdapter {
                 LocationWeather locationWeather = response.body();
 
                 ListInfo[] locations = locationWeather.getList();
-                WeatherRecyclerAdapter recyclerAdapter = new WeatherRecyclerAdapter(locations, context);
-                recyclerView.setAdapter(recyclerAdapter);
+                WeatherRecyclerAdapter recyclerAdapter = new WeatherRecyclerAdapter(locations, context, locationWeather.getLocation());
+                weatherRecyclerView.setAdapter(recyclerAdapter);
             }
 
             @Override
             public void onFailure(Throwable t) {
-
             }
         });
-        container.addView(view);
-        return view;
+
+        container.addView(weatherPagerView);
+        return weatherPagerView;
     }
 
     @Override
@@ -102,6 +142,11 @@ public class LocationPagerAdapter extends PagerAdapter {
     @Override
     public boolean isViewFromObject(View view, Object object) {
         return view == object;
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        container.removeView((View) object);
     }
 
 }

@@ -32,6 +32,6 @@ public class ForecastViewHolder extends RecyclerView.ViewHolder {
                 .into(imageView);
         this.dayOfWeek.setText(weather.getDt());
         this.high.setText(weather.getTemp().getMax() + "°");
-        this.low.setText(weather.getTemp().getMin() + "°");
+        this.low.setText("   " + weather.getTemp().getMin() + "°");
     }
 }
