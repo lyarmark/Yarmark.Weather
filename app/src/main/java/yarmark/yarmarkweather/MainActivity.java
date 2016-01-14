@@ -46,14 +46,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        String temp = sharedPreferences.getString("LOCATIONS", "11218");
-        String[] temp2 = temp.split(" ");
-        for (String s : temp2) {
+        String[] zipsArray = sharedPreferences.getString("ZIPCODES", "11218").split(" ");
+        for (String s : zipsArray) {
             zips.add(s);
         }
-//        String[] zipsArray = sharedPreferences.getString("ZIPCODES", "11218").split(" ");
-        //      ArrayList<String> zips = new ArrayList<String>();
-        //    Collections.addAll(zips, zipsArray);
         locationsPagerAdapter.notifyDataSetChanged();
     }
 }

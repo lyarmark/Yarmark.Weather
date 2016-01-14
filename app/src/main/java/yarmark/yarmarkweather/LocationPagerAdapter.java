@@ -18,8 +18,11 @@ import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,7 +42,8 @@ public class LocationPagerAdapter extends PagerAdapter {
     private ArrayList<String> zips;
     private Context context;
     private Retrofit retrofit;
-    private WeatherService service;
+    private WeatherForecastService forecastService;
+    private CurrentWeatherService currentService;
 
     public LocationPagerAdapter(ArrayList<String> zips, Context mainActivityContext) {
         this.zips = zips;
@@ -49,7 +53,9 @@ public class LocationPagerAdapter extends PagerAdapter {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        this.service = retrofit.create(WeatherService.class);
+        this.currentService = retrofit.create(CurrentWeatherService.class);
+        this.forecastService = retrofit.create(WeatherForecastService.class);
+
     }
 
 
@@ -111,24 +117,44 @@ public class LocationPagerAdapter extends PagerAdapter {
         map.put("zip", zips.get(position));
         map.put("appid", "2de143494c0b295cca9337e1e96b00e0");
         map.put("units", "imperial");
+
+        final List<Object> weathers = new ArrayList<>();
+
+        Call<CurrentWeather> callCurrent = currentService.getCurrentWeather(map);
+        callCurrent.enqueue(new Callback<CurrentWeather>() {
+            @Override
+            public void onResponse(Response<CurrentWeather> response) {
+                CurrentWeather currentWeather = response.body();
+                weathers.add(0, currentWeather);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+
         map.put("cnt", "16");
-
-        Call<LocationWeather> call = service.getLocationWeather(map);
-
-        call.enqueue(new Callback<LocationWeather>() {
+        Call<LocationWeather> forecastCall = forecastService.getLocationWeather(map);
+        forecastCall.enqueue(new Callback<LocationWeather>() {
             @Override
             public void onResponse(Response<LocationWeather> response) {
                 LocationWeather locationWeather = response.body();
 
                 ListInfo[] locations = locationWeather.getList();
-                WeatherRecyclerAdapter recyclerAdapter = new WeatherRecyclerAdapter(locations, context, locationWeather.getLocation());
-                weatherRecyclerView.setAdapter(recyclerAdapter);
+                ListInfo[] listItems = locationWeather.getList();
+                for (ListInfo item : listItems) {
+                    weathers.add(item);
+                }
+                WeatherRecyclerAdapter weatherRecyclerAdapter = new WeatherRecyclerAdapter(weathers, context, locationWeather.getLocation());
+                weatherRecyclerView.setAdapter(weatherRecyclerAdapter);
             }
 
             @Override
             public void onFailure(Throwable t) {
             }
         });
+
 
         container.addView(weatherPagerView);
         return weatherPagerView;

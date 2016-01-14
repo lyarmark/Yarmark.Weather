@@ -30,15 +30,15 @@ public class CurrentViewHolder extends RecyclerView.ViewHolder {
         this.description = (TextView) itemView.findViewById(R.id.desc);
     }
 
-    public void bind(ListInfo currentWeather, String city) {
-        Picasso.with(this.context).load("http://openweathermap.org/img/w/" + currentWeather.getWeather().getIcon() + ".png")
+    public void bind(CurrentWeather currentWeather, String city) {
+        Picasso.with(this.context).load("http://openweathermap.org/img/w/" + currentWeather.getIcon(0) + ".png")
                 .placeholder(R.drawable.naweather)
                 .into(weatherIcon);
 
         this.city.setText(city);
-        this.temperature.setText(currentWeather.getTemp().getDay());
-        this.high.setText(currentWeather.getTemp().getMax() + "°");
-        this.low.setText("   " + currentWeather.getTemp().getMin() + "°");
-        this.description.setText(currentWeather.getWeather().getDescription());
+        this.temperature.setText(currentWeather.getTemperature().getTemp());
+        this.high.setText(currentWeather.getTemperature().getTemp() + "°");
+        this.low.setText("   " + currentWeather.getTemperature().getMin() + "°");
+        this.description.setText(currentWeather.getDescription(0));
     }
 }
