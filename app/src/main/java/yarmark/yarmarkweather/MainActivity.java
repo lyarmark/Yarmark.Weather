@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<String> zips = new ArrayList<String>();
         zips.add("11218");
-        zips.add("08701");
+        zips.add("99501");
 
         LocationPagerAdapter pagerAdapter = new LocationPagerAdapter(zips, this);
         viewPager.setAdapter(pagerAdapter);

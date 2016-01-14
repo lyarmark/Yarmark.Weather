@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 public class CurrentViewHolder extends RecyclerView.ViewHolder {
 
+    private TextView location;
     private TextView temperature;
     private TextView high;
     private TextView low;

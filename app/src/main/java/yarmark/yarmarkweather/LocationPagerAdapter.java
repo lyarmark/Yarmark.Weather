@@ -17,6 +17,7 @@ import com.google.gson.JsonObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,7 +27,7 @@ import retrofit2.Retrofit;
 
 public class LocationPagerAdapter extends PagerAdapter {
 
-    private EditText zipcode;
+    private TextView zipcode;
     private TextView time;
     private ArrayList<String> zips;
     private Context context;
@@ -58,7 +59,7 @@ public class LocationPagerAdapter extends PagerAdapter {
         final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
         recyclerView.setLayoutManager(layoutManager);
 
-        this.zipcode = (EditText) view.findViewById(R.id.zipcode);
+        this.zipcode = (TextView) view.findViewById(R.id.zipcode);
         this.zipcode.setText(zips.get(position));
 
         this.time = (android.widget.TextClock) view.findViewById(R.id.dateTime);
@@ -66,17 +67,18 @@ public class LocationPagerAdapter extends PagerAdapter {
         Date date = new Date();
         this.time.setText(format.format(date));
 
-        Call<JsonObject> call = service.getLocationWeather(zips.get(position));
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("zip", zips.get(position));
+        map.put("appid", "2de143494c0b295cca9337e1e96b00e0");
+        map.put("units", "imperial");
+        map.put("cnt", "16");
 
-        call.enqueue(new Callback<JsonObject>() {
+        Call<LocationWeather> call = service.getLocationWeather(map);
+
+        call.enqueue(new Callback<LocationWeather>() {
             @Override
-            public void onResponse(Response<JsonObject> response) {
-                JsonObject weatherJson = response.body();
-
-                GsonBuilder builder = new GsonBuilder();
-                Gson gson = builder.create();
-
-                LocationWeather locationWeather = gson.fromJson(weatherJson, LocationWeather.class);
+            public void onResponse(Response<LocationWeather> response) {
+                LocationWeather locationWeather = response.body();
 
                 ListInfo[] locations = locationWeather.getList();
                 WeatherRecyclerAdapter recyclerAdapter = new WeatherRecyclerAdapter(locations, context);

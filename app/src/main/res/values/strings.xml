@@ -1,11 +1,5 @@
 <resources>
     <string name="app_name">Yarmark.Weather</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="location">location</string>
-    <string name="currentTemperature">currentTemperature</string>
-    <string name="high">high</string>
-    <string name="low">low</string>
-    <string name="description">description</string>
 </resources>

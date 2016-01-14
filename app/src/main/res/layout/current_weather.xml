@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerInParent="true"
-        android:text="@string/location"
-        tools:text="Location" />
 
     <TextView
         android:id="@+id/temperature"
@@ -21,14 +12,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:text="@string/currentTemperature" />
+        android:textSize="40sp"
+        tools:text="temperature" />
 
     <TextView
         android:id="@+id/high"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/temperature"
-        android:text="@string/high"
         tools:text="high" />
 
     <TextView
@@ -37,14 +28,24 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/temperature"
         android:layout_toRightOf="@+id/high"
-        android:text="@string/low"
         tools:text="low" />
+
+    <ImageView
+        android:id="@+id/currentIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_above="@id/high"
+        android:layout_alignParentLeft="true"
+        tools:text="image" />
+
 
     <TextView
         android:id="@+id/desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/high"
-        android:text="@string/description"
+        android:layout_toRightOf="@id/currentIcon"
         tools:text="Description" />
-</LinearLayout>
+
+
+</RelativeLayout>
