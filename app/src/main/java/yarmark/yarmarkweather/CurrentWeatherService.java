@@ -7,6 +7,6 @@ import retrofit2.http.GET;
 import retrofit2.http.QueryMap;
 
 public interface CurrentWeatherService {
-    @GET("data/2.5/forecast/daily?")
+    @GET("data/2.5/weather?")
     Call<CurrentWeather> getCurrentWeather(@QueryMap Map<String, String> zip);
 }

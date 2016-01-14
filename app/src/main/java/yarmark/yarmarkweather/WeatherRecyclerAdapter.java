@@ -41,7 +41,7 @@ public class WeatherRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        switch (position) {
+        switch (viewHolder.getItemViewType()) {
             case 0: {
                 CurrentViewHolder currentViewHolder = (CurrentViewHolder) viewHolder;
                 currentViewHolder.bind((CurrentWeather) weather.get(position), this.city);
