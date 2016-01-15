@@ -18,8 +18,6 @@ import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -43,8 +41,7 @@ public class LocationPagerAdapter extends PagerAdapter {
     private ArrayList<String> zips;
     private Context context;
     private Retrofit retrofit;
-    private WeatherForecastService forecastService;
-    private CurrentWeatherService currentService;
+    private WeatherService weatherService;
 
     public LocationPagerAdapter(ArrayList<String> zips, Context mainActivityContext) {
         this.zips = zips;
@@ -54,8 +51,7 @@ public class LocationPagerAdapter extends PagerAdapter {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        this.currentService = retrofit.create(CurrentWeatherService.class);
-        this.forecastService = retrofit.create(WeatherForecastService.class);
+        this.weatherService = retrofit.create(WeatherService.class);
 
     }
 
@@ -122,7 +118,7 @@ public class LocationPagerAdapter extends PagerAdapter {
 
         final List<Object> weathers = new ArrayList<>();
 
-        Call<CurrentWeather> callCurrent = currentService.getCurrentWeather(map);
+        Call<CurrentWeather> callCurrent = weatherService.getCurrentWeather(map);
         callCurrent.enqueue(new Callback<CurrentWeather>() {
             @Override
             public void onResponse(Response<CurrentWeather> response) {
@@ -138,13 +134,12 @@ public class LocationPagerAdapter extends PagerAdapter {
         });
 
         map.put("cnt", "16");
-        Call<LocationWeather> forecastCall = forecastService.getLocationWeather(map);
+        Call<LocationWeather> forecastCall = weatherService.getForecastWeather(map);
         forecastCall.enqueue(new Callback<LocationWeather>() {
             @Override
             public void onResponse(Response<LocationWeather> response) {
                 LocationWeather locationWeather = response.body();
 
-                ListInfo[] locations = locationWeather.getList();
                 ListInfo[] listItems = locationWeather.getList();
                 for (ListInfo item : listItems) {
                     weathers.add(item);

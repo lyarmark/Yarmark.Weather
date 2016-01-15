@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         locationsViewPager = (ViewPager) findViewById(R.id.viewPager);
-        zips = new ArrayList<String>();
+        zips = new ArrayList<>();
         sharedPreferences = this.getSharedPreferences("DEFAULT", MODE_PRIVATE);
 
         locationsPagerAdapter = new LocationPagerAdapter(zips, this);
@@ -37,16 +37,16 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         StringBuilder builder = new StringBuilder();
         for (String l : zips) {
-            builder.append(l + " ");
+            builder.append(l + ",");
         }
-        editor.putString("LOCATIONS", builder.toString());
+        editor.putString("ZIPCODES", builder.toString());
         editor.apply();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        String[] zipsArray = sharedPreferences.getString("ZIPCODES", "11218").split(" ");
+        String[] zipsArray = sharedPreferences.getString("ZIPCODES", "11218").split(",");
         for (String s : zipsArray) {
             zips.add(s);
         }
