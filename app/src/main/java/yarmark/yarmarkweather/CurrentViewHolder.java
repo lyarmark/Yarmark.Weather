@@ -10,7 +10,6 @@ import com.squareup.picasso.Picasso;
 
 public class CurrentViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView city;
     private ImageView weatherIcon;
     private TextView temperature;
     private TextView high;
@@ -22,7 +21,6 @@ public class CurrentViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         this.context = mainActivityContext;
 
-        this.city = (TextView) itemView.findViewById(R.id.city);
         this.weatherIcon = (ImageView) itemView.findViewById(R.id.currentIcon);
         this.temperature = (TextView) itemView.findViewById(R.id.temperature);
         this.high = (TextView) itemView.findViewById(R.id.high);
@@ -35,7 +33,6 @@ public class CurrentViewHolder extends RecyclerView.ViewHolder {
                 .placeholder(R.drawable.naweather)
                 .into(weatherIcon);
 
-        this.city.setText(city);
         this.temperature.setText(currentWeather.getTemperature().getTemp());
         this.high.setText(currentWeather.getTemperature().getTemp() + "°");
         this.low.setText("   " + currentWeather.getTemperature().getMin() + "°");

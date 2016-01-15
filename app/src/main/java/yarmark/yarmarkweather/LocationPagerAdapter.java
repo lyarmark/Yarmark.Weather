@@ -35,6 +35,7 @@ public class LocationPagerAdapter extends PagerAdapter {
     private Button addButton;
     private EditText chooseZip;
 
+    private TextView city;
     private TextView zipcode;
     private TextView time;
     private ImageView background;
@@ -105,6 +106,7 @@ public class LocationPagerAdapter extends PagerAdapter {
             }
         });
 
+        this.city = (TextView) weatherPagerView.findViewById(R.id.city);
         this.zipcode = (TextView) weatherPagerView.findViewById(R.id.zipcode);
         this.zipcode.setText(zips.get(position));
 
@@ -126,6 +128,7 @@ public class LocationPagerAdapter extends PagerAdapter {
             public void onResponse(Response<CurrentWeather> response) {
                 CurrentWeather currentWeather = response.body();
                 weathers.add(0, currentWeather);
+                city.setText(currentWeather.getLocation());
             }
 
             @Override
